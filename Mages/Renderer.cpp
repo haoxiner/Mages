@@ -2,6 +2,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 Renderer::Renderer()
 {
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
 }
 
 Renderer::~Renderer()
@@ -10,15 +12,12 @@ Renderer::~Renderer()
 
 void Renderer::Prepare()
 {
-  glEnable(GL_DEPTH_BUFFER);
-  glDepthFunc(GL_LESS);
   glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::Render(Entity *entity, StaticShaderProgram *staticShader)
+void Renderer::Render(Entity *entity, StaticShader *staticShader)
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
   const TexturedModel *model = entity->model_;
   const RawModel *rawModel = model->rawModel_;
   const ModelTexture *texture = model->modelTexture_;
@@ -28,14 +27,12 @@ void Renderer::Render(Entity *entity, StaticShaderProgram *staticShader)
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture->textureID_);
 
-  entity->Move(0.0f, 0.0f, 0.0f);
   glm::mat4 m;
   m = glm::translate(m, entity->position_);
+  m = glm::rotate(m, entity->rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));
+  m = glm::rotate(m, entity->rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
   staticShader->LoadModelMatrix(m);
-  //glEnable(GL_BLEND);
-  //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glDrawElements(GL_TRIANGLES, rawModel->indicesCount_, GL_UNSIGNED_INT, (void*) 0);
-  //glDisable(GL_BLEND);
   
   glBindTexture(GL_TEXTURE_2D, 0);
   glDisableVertexAttribArray(0);

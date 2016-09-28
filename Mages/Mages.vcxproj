@@ -152,7 +152,9 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="MasterRenderer.cpp" />
     <ClCompile Include="ModelTexture.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RawModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
@@ -165,12 +167,14 @@
     <ClInclude Include="Display.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="MasterRenderer.h" />
     <ClInclude Include="ModelTexture.h" />
     <ClInclude Include="OpenGLHeader.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="RawModel.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="StaticShaderProgram.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="StaticShader.h" />
     <ClInclude Include="TexturedModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

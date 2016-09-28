@@ -4,6 +4,5 @@ in vec2 v_texCoord;
 out vec4 fragColor;
 void main()
 {
-  fragColor = texture(u_sampler, v_texCoord);
-  // fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  fragColor = vec4(pow(texture(u_sampler, v_texCoord).xyz, vec3(1.0/2.2)), 1.0);
 }

@@ -1,11 +1,11 @@
 #pragma once
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include "Camera.h"
-class StaticShaderProgram : public ShaderProgram
+class StaticShader : public Shader
 {
 public:
-  StaticShaderProgram();
-  ~StaticShaderProgram();
+  StaticShader();
+  ~StaticShader();
   void LoadModelMatrix(const glm::mat4 &matrix4f);
   void LoadViewMatrix(const Camera &camera);
 protected:

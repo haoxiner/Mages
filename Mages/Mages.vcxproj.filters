@@ -25,6 +25,12 @@
     <Filter Include="头文件\Model">
       <UniqueIdentifier>{d47af60d-033d-4484-9274-1879147f9d7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Renderer">
+      <UniqueIdentifier>{8ed0e40b-4fa0-4855-9e6b-00ebfb8ab702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Light">
+      <UniqueIdentifier>{c85e3310-103a-4960-8b5d-e67afb06040f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestGame.cpp">
@@ -60,6 +66,12 @@
     <ClCompile Include="Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MasterRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -68,17 +80,8 @@
     <ClInclude Include="OpenGLHeader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>头文件\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderProgram.h">
-      <Filter>头文件\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticShaderProgram.h">
-      <Filter>头文件\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>头文件\Model</Filter>
@@ -94,6 +97,21 @@
     </ClInclude>
     <ClInclude Include="TexturedModel.h">
       <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>头文件\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticShader.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

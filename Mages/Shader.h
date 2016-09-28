@@ -2,11 +2,11 @@
 #include "OpenGLHeader.h"
 #include <glm/glm.hpp>
 #include <string>
-class ShaderProgram
+class Shader
 {
 public:
-  ShaderProgram();
-  virtual ~ShaderProgram();
+  Shader();
+  virtual ~Shader();
   void Use();
   void Release();
 protected:
