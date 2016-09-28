@@ -32,9 +32,10 @@ int WINAPI wWinMain(
 	};
 	Loader loader;
 	TexturedModel model(loader.LoadToVAO(vertices, indices), new ModelTexture(loader.LoadTexture("./Resources/123.DDS")));
-	Renderer renderer;
+  StaticShader staticShader;
+  Renderer renderer(&staticShader);
 	renderer.Prepare();
-	StaticShader shaderProgram;
+	
 
   std::default_random_engine randomEngine;
   std::uniform_real_distribution<float> uniformDistribution(0.0f, 1.0f);
@@ -55,12 +56,12 @@ int WINAPI wWinMain(
 
 	while (display.IsRunning())
 	{
-		shaderProgram.Use();
-    shaderProgram.LoadViewMatrix(camera);
+    staticShader.Use();
+    staticShader.LoadViewMatrix(camera);
     renderer.Prepare();
     for (auto entity : cubes)
-		  renderer.Render(entity, &shaderProgram);
-		shaderProgram.Release();
+		  renderer.Render(entity);
+    staticShader.Release();
 		display.Update();
 	}
 	display.Destroy();
