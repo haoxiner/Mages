@@ -14,6 +14,7 @@ public:
   ~MasterRenderer();
   void Render(const PointLight &pointLight, const Camera &camera);
   void ProcessEntity(const Entity &entity);
+  void Prepare();
 private:
   StaticShader *staticShader_;
   Renderer *renderer_;

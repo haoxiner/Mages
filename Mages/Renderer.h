@@ -8,7 +8,6 @@ class Renderer
 public:
   Renderer(StaticShader *staticShader);
   ~Renderer();
-  void Prepare();
   void Render(std::map<const TexturedModel*, std::vector<const Entity*>> &entities);
   void PrepareTexturedModel(const TexturedModel *model);
   void UnbindTexturedModel();

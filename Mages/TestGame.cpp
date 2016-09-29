@@ -59,6 +59,7 @@ int WINAPI wWinMain(
     {
       renderer.ProcessEntity(*entity);
     }
+    renderer.Prepare();
     renderer.Render(pointLight, camera);
 		display.Update();
 	}
