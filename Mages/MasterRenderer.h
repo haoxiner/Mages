@@ -10,12 +10,14 @@
 class MasterRenderer
 {
 public:
-  MasterRenderer();
+  MasterRenderer(StaticShader *staticShader);
   ~MasterRenderer();
   void Render(const PointLight &pointLight, const Camera &camera);
+  void ProcessEntity(const Entity &entity);
 private:
   StaticShader *staticShader_;
   Renderer *renderer_;
-  std::map<TexturedModel*, std::vector<Entity*>> entities_;
+  // entities to be rendered
+  std::map<const TexturedModel*, std::vector<const Entity*>> entities_;
 };
 

@@ -9,11 +9,10 @@ public:
   Renderer(StaticShader *staticShader);
   ~Renderer();
   void Prepare();
-  void Render(Entity *entity);
-  void Render(std::map<TexturedModel*, std::vector<Entity>> &entities);
-  void PrepareTexturedModel(TexturedModel *model);
+  void Render(std::map<const TexturedModel*, std::vector<const Entity*>> &entities);
+  void PrepareTexturedModel(const TexturedModel *model);
   void UnbindTexturedModel();
-  void PrepareInstance(Entity &entity);
+  void PrepareInstance(const Entity &entity);
 private:
   StaticShader *staticShader_;
 };

@@ -1,9 +1,10 @@
 #include "Display.h"
 #include "Loader.h"
-#include "Renderer.h"
+#include "MasterRenderer.h"
 #include "StaticShader.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "PointLight.h"
 #include <fstream>
 #include <random>
 int WINAPI wWinMain(
@@ -33,10 +34,7 @@ int WINAPI wWinMain(
 	Loader loader;
 	TexturedModel model(loader.LoadToVAO(vertices, indices), new ModelTexture(loader.LoadTexture("./Resources/123.DDS")));
   StaticShader staticShader;
-  Renderer renderer(&staticShader);
-	renderer.Prepare();
-	
-
+  MasterRenderer renderer(&staticShader);
   std::default_random_engine randomEngine;
   std::uniform_real_distribution<float> uniformDistribution(0.0f, 1.0f);
   std::vector<Entity*> cubes;
@@ -54,14 +52,14 @@ int WINAPI wWinMain(
   camera.position_ = glm::vec3(0.0f, 0.0f, 5.0f);
   camera.roll_ = 0.0f;camera.pitch_ = 0.0f;camera.yaw_ = 0.0f;
 
+  PointLight pointLight;
 	while (display.IsRunning())
 	{
-    staticShader.Use();
-    staticShader.LoadViewMatrix(camera);
-    renderer.Prepare();
     for (auto entity : cubes)
-		  renderer.Render(entity);
-    staticShader.Release();
+    {
+      renderer.ProcessEntity(*entity);
+    }
+    renderer.Render(pointLight, camera);
 		display.Update();
 	}
 	display.Destroy();
