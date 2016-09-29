@@ -1,17 +1,17 @@
-#include "Renderer.h"
+#include "EntityRenderer.h"
 #include <glm/gtc/matrix_transform.hpp>
-Renderer::Renderer(StaticShader *staticShader)
+EntityRenderer::EntityRenderer(StaticShader *staticShader)
   :staticShader_(staticShader)
 {
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 }
 
-Renderer::~Renderer()
+EntityRenderer::~EntityRenderer()
 {
 }
 
-void Renderer::Render(std::map<const TexturedModel*, std::vector<const Entity*>> &entities)
+void EntityRenderer::Render(std::map<const TexturedModel*, std::vector<const Entity*>> &entities)
 {
   for (auto pair : entities)
   {
@@ -26,7 +26,7 @@ void Renderer::Render(std::map<const TexturedModel*, std::vector<const Entity*>>
   }
 }
 
-void Renderer::PrepareTexturedModel(const TexturedModel * model)
+void EntityRenderer::PrepareTexturedModel(const TexturedModel * model)
 {
   const RawModel *rawModel = model->rawModel_;
   const ModelTexture *texture = model->modelTexture_;
@@ -36,15 +36,15 @@ void Renderer::PrepareTexturedModel(const TexturedModel * model)
   glBindTexture(GL_TEXTURE_2D, texture->textureID_);
 }
 
-void Renderer::UnbindTexturedModel()
+void EntityRenderer::UnbindTexturedModel()
 {
   glBindTexture(GL_TEXTURE_2D, 0);
   glDisableVertexAttribArray(0);
   glBindVertexArray(0);
 }
 
-void Renderer::PrepareInstance(const Entity & entity)
-{
+void EntityRenderer::PrepareInstance(const Entity & entity)
+{ 
   glm::mat4 m;
   m = glm::translate(m, entity.position_);
   m = glm::rotate(m, entity.rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));

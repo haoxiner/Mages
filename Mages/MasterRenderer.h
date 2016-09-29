@@ -1,6 +1,6 @@
 #pragma once
 #include "StaticShader.h"
-#include "Renderer.h"
+#include "EntityRenderer.h"
 #include "TexturedModel.h"
 #include "Entity.h"
 #include "PointLight.h"
@@ -17,7 +17,7 @@ public:
   void Prepare();
 private:
   StaticShader *staticShader_;
-  Renderer *renderer_;
+  EntityRenderer *entityRenderer_;
   // entities to be rendered
   std::map<const TexturedModel*, std::vector<const Entity*>> entities_;
 };

@@ -3,11 +3,11 @@
 #include "StaticShader.h"
 #include <map>
 #include <vector>
-class Renderer
+class EntityRenderer
 {
 public:
-  Renderer(StaticShader *staticShader);
-  ~Renderer();
+  EntityRenderer(StaticShader *staticShader);
+  ~EntityRenderer();
   void Render(std::map<const TexturedModel*, std::vector<const Entity*>> &entities);
   void PrepareTexturedModel(const TexturedModel *model);
   void UnbindTexturedModel();

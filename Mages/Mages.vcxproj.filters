@@ -31,6 +31,21 @@
     <Filter Include="头文件\Light">
       <UniqueIdentifier>{c85e3310-103a-4960-8b5d-e67afb06040f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Renderer">
+      <UniqueIdentifier>{7d34ec31-fd3d-4a2d-85e9-4719500ce304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Shader">
+      <UniqueIdentifier>{0ed1cef6-147e-4e76-9a5a-f5a97d787291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Model">
+      <UniqueIdentifier>{7c11c52c-0424-4d84-87dd-57b6795645a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Light">
+      <UniqueIdentifier>{5eb7a22b-e439-4371-a8f8-5009e983e297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Camera">
+      <UniqueIdentifier>{4f176ee5-4caf-4341-a35c-9520a0cda62d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestGame.cpp">
@@ -39,38 +54,38 @@
     <ClCompile Include="Display.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="MasterRenderer.cpp">
+      <Filter>源文件\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Loader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelTexture.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="RawModel.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderProgram.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="EntityRenderer.cpp">
+      <Filter>源文件\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="StaticShaderProgram.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>源文件\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelTexture.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="RawModel.cpp">
+      <Filter>源文件\Model</Filter>
     </ClCompile>
     <ClCompile Include="TexturedModel.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="Loader.cpp">
+      <Filter>源文件\Model</Filter>
     </ClCompile>
-    <ClCompile Include="MasterRenderer.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="Entity.cpp">
+      <Filter>源文件\Model</Filter>
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,20 +113,20 @@
     <ClInclude Include="TexturedModel.h">
       <Filter>头文件\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>头文件\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="MasterRenderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="StaticShader.h">
       <Filter>头文件\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>头文件\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="EntityRenderer.h">
+      <Filter>头文件\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterRenderer.h">
+      <Filter>头文件\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="PointLight.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

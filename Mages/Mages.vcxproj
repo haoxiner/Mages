@@ -156,7 +156,7 @@
     <ClCompile Include="ModelTexture.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RawModel.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="EntityRenderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="StaticShaderProgram.cpp" />
     <ClCompile Include="TestGame.cpp" />
@@ -172,7 +172,7 @@
     <ClInclude Include="OpenGLHeader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RawModel.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="EntityRenderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="StaticShader.h" />
     <ClInclude Include="TexturedModel.h" />
