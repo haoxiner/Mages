@@ -1,10 +1,13 @@
 #include "EntityRenderer.h"
 #include <glm/gtc/matrix_transform.hpp>
-EntityRenderer::EntityRenderer(StaticShader *staticShader)
+EntityRenderer::EntityRenderer(StaticShader *staticShader, const glm::mat4 &projectionMatrix)
   :staticShader_(staticShader)
 {
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
+  staticShader_->Use();
+  staticShader_->LoadProjectionMatrix(projectionMatrix);
+  staticShader_->Release();
 }
 
 EntityRenderer::~EntityRenderer()

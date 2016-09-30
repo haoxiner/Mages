@@ -6,7 +6,7 @@
 class EntityRenderer
 {
 public:
-  EntityRenderer(StaticShader *staticShader);
+  EntityRenderer(StaticShader *staticShader, const glm::mat4 &projectionMatrix);
   ~EntityRenderer();
   void Render(std::map<const TexturedModel*, std::vector<const Entity*>> &entities);
   void PrepareTexturedModel(const TexturedModel *model);

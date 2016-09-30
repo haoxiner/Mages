@@ -1,7 +1,10 @@
 #include "MasterRenderer.h"
+#include <glm/gtc/matrix_transform.hpp>
 MasterRenderer::MasterRenderer(StaticShader *staticShader)
-  :staticShader_(staticShader), entityRenderer_(new EntityRenderer(staticShader))
+  :staticShader_(staticShader)
 {
+  glm::mat4 projectionMatrix = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.01f, 1000.0f);
+  entityRenderer_ = new EntityRenderer(staticShader, projectionMatrix);
 }
 
 MasterRenderer::~MasterRenderer()

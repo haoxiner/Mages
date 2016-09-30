@@ -42,10 +42,12 @@ void StaticShader::LoadViewMatrix(const Camera & camera)
   view = glm::rotate(view, -camera.pitch_, glm::vec3(0.0f, 1.0f, 0.0f));
   view = glm::rotate(view, -camera.yaw_, glm::vec3(0.0f, 0.0f, 1.0f));
   view = glm::translate(view, -camera.position_);
-  
-	glm::mat4 projection = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.001f, 1000.0f);
-	LoadMatrix4f(viewLocation_, view);
-	LoadMatrix4f(projectionLocation_, projection);
+  LoadMatrix4f(viewLocation_, view);
+}
+
+void StaticShader::LoadProjectionMatrix(const glm::mat4 & projectionMatrix)
+{
+  LoadMatrix4f(projectionLocation_, projectionMatrix);
 }
 
 void StaticShader::BindAttributes()

@@ -8,6 +8,7 @@ public:
   ~StaticShader();
   void LoadModelMatrix(const glm::mat4 &matrix4f);
   void LoadViewMatrix(const Camera &camera);
+  void LoadProjectionMatrix(const glm::mat4 &projectionMatrix);
 protected:
   virtual void BindAttributes();
   virtual void GetAllUniformLocations();
