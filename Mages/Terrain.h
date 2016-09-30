@@ -1,10 +1,11 @@
 #pragma once
 #include "ModelTexture.h"
 #include "RawModel.h"
+#include "Loader.h"
 class Terrain
 {
 public:
-  Terrain(const RawModel *rawModel, const ModelTexture *texture, const float x, const float z);
+  Terrain(const float x, const float z, const ModelTexture * texture, Loader &loader);
   ~Terrain();
 private:
   static const int SIZE = 800;

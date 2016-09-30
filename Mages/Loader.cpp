@@ -12,7 +12,7 @@ Loader::~Loader()
 {
 }
 
-RawModel * Loader::LoadToVAO(const std::vector<float>& vertices, const std::vector<unsigned>& indices)
+RawModel * Loader::LoadToVAO(const std::vector<float>& vertices, const std::vector<int>& indices)
 {
   GLuint vaoID = CreateVAO();
   StoreDataInAttributeList(0, vertices);
@@ -119,7 +119,7 @@ void Loader::StoreDataInAttributeList(GLuint attributeLocation, const std::vecto
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Loader::BindIndicesBuffer(const std::vector<unsigned>& data)
+void Loader::BindIndicesBuffer(const std::vector<int>& data)
 {
   GLuint vboID;
   glGenBuffers(1, &vboID);

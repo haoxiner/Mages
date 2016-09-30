@@ -60,9 +60,6 @@
     <ClCompile Include="EntityRenderer.cpp">
       <Filter>源文件\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderProgram.cpp">
-      <Filter>源文件\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="ModelTexture.cpp">
       <Filter>源文件\Model</Filter>
     </ClCompile>
@@ -89,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>源文件\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

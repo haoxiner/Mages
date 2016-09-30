@@ -52,7 +52,9 @@ void StaticShader::LoadProjectionMatrix(const glm::mat4 & projectionMatrix)
 
 void StaticShader::BindAttributes()
 {
-  Shader::BindAttribute(0, "position");
+  BindAttribute(0, "position");
+  //BindAttribute(1, "normal");
+  //BindAttribute(2, "texCoord");
 }
 
 void StaticShader::GetAllUniformLocations()
