@@ -1,5 +1,5 @@
 #include "RawModel.h"
-RawModel::RawModel(GLuint vaoID, unsigned indicesCount)
+RawModel::RawModel(GLuint vaoID, int indicesCount)
   :vaoID_(vaoID), indicesCount_(indicesCount)
 {
 }

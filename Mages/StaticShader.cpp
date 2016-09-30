@@ -16,7 +16,7 @@ StaticShader::StaticShader()
   fShaderFile.close();
   std::string fragmentShaderSource(fShaderStream.str());
   
-  Shader::Load(vertexShaderSource, fragmentShaderSource);
+  Load(vertexShaderSource, fragmentShaderSource);
 }
 
 StaticShader::~StaticShader()
@@ -53,8 +53,8 @@ void StaticShader::LoadProjectionMatrix(const glm::mat4 & projectionMatrix)
 void StaticShader::BindAttributes()
 {
   BindAttribute(0, "position");
-  //BindAttribute(1, "normal");
-  //BindAttribute(2, "texCoord");
+  BindAttribute(1, "normal");
+  BindAttribute(2, "texCoord");
 }
 
 void StaticShader::GetAllUniformLocations()

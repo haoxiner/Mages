@@ -29,11 +29,21 @@ int WINAPI wWinMain(
   aiMesh *mesh = scene->mMeshes[0];
   std::vector<float> vertices;
   std::vector<int> indices;
+  std::vector<float> normals;
+  std::vector<float> texCoords;
+
   for (int i = 0; i < mesh->mNumVertices; i++)
   {
     vertices.push_back(mesh->mVertices[i].x);
     vertices.push_back(mesh->mVertices[i].y);
     vertices.push_back(mesh->mVertices[i].z);
+
+    normals.push_back(mesh->mNormals[i].x);
+    normals.push_back(mesh->mNormals[i].y);
+    normals.push_back(mesh->mNormals[i].z);
+
+    texCoords.push_back(mesh->mTextureCoords[0][i].x);
+    texCoords.push_back(mesh->mTextureCoords[0][i].y);
   }
   for (int i = 0; i < mesh->mNumFaces; i++)
   {
@@ -43,7 +53,7 @@ int WINAPI wWinMain(
   }
 
 	Loader loader;
-	TexturedModel model(loader.LoadToVAO(vertices, indices), new ModelTexture(loader.LoadTexture("./Resources/123.DDS")));
+	TexturedModel model(loader.LoadToVAO(vertices, normals, texCoords, indices), new ModelTexture(loader.LoadTexture("./Resources/123.DDS")));
   StaticShader staticShader;
   MasterRenderer renderer(&staticShader);
   std::default_random_engine randomEngine;
@@ -56,7 +66,7 @@ int WINAPI wWinMain(
 
 
   Camera camera;
-  camera.position_ = glm::vec3(0.0f, 50.0f, 400.0f);
+  camera.position_ = glm::vec3(0.0f, 100.0f, 230.0f);
   camera.roll_ = 0.0f;camera.pitch_ = 0.0f;camera.yaw_ = 0.0f;
 
   PointLight pointLight;
@@ -65,6 +75,7 @@ int WINAPI wWinMain(
     for (auto entity : cubes)
     {
       renderer.ProcessEntity(*entity);
+      entity->rotation_.y += 0.01f;
     }
     renderer.Prepare();
     renderer.Render(pointLight, camera);

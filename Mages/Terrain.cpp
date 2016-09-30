@@ -14,6 +14,8 @@ Terrain::~Terrain()
 RawModel *GenerateTerrain(Loader &loader)
 {
   std::vector<float> vertices;
+  std::vector<float> normals;
+  std::vector<float> texCoords;
   std::vector<int> indices;
-  return loader.LoadToVAO(vertices, indices);
+  return loader.LoadToVAO(vertices, normals, texCoords, indices);
 }

@@ -35,6 +35,8 @@ void EntityRenderer::PrepareTexturedModel(const TexturedModel * model)
   const ModelTexture *texture = model->modelTexture_;
   glBindVertexArray(rawModel->vaoID_);
   glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+  glEnableVertexAttribArray(2);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture->textureID_);
 }
@@ -43,6 +45,8 @@ void EntityRenderer::UnbindTexturedModel()
 {
   glBindTexture(GL_TEXTURE_2D, 0);
   glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(2);
   glBindVertexArray(0);
 }
 

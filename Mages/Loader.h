@@ -7,12 +7,16 @@ class Loader
 public:
   Loader();
   ~Loader();
-  RawModel* LoadToVAO(const std::vector<float> &vertices, const std::vector<int> &indices);
+  RawModel* LoadToVAO(
+    const std::vector<float> &vertices,
+    const std::vector<float> &normals,
+    const std::vector<float> &texCoords,
+    const std::vector<int> &indices);
   GLuint LoadTexture(const std::string &fileName);
 private:
   GLuint CreateVAO();
   void UnbindVAO();
-  void StoreDataInAttributeList(GLuint attributeLocation, const std::vector<float> &data);
+  void StoreDataInAttributeList(int attributeLocation, int numOfComponentsPerVertex, const std::vector<float> &data);
   void BindIndicesBuffer(const std::vector<int> &data);
   std::vector<GLuint> vaos_;
   std::vector<GLuint> vbos_;
