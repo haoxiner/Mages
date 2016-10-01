@@ -160,6 +160,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TerrainRenderer.cpp" />
     <ClCompile Include="TestGame.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
   </ItemGroup>
@@ -177,6 +178,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="StaticShader.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="TerrainRenderer.h" />
     <ClInclude Include="TexturedModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

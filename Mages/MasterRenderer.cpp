@@ -3,8 +3,9 @@
 MasterRenderer::MasterRenderer(StaticShader *staticShader)
   :staticShader_(staticShader)
 {
-  glm::mat4 projectionMatrix = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.01f, 1000.0f);
-  entityRenderer_ = new EntityRenderer(staticShader, projectionMatrix);
+  glm::mat4 projectionMatrix = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.01f, 10000.0f);
+  entityRenderer_ = new EntityRenderer(staticShader_, projectionMatrix);
+  terrainRenderer_ = new TerrainRenderer(staticShader_, projectionMatrix);
 }
 
 MasterRenderer::~MasterRenderer()
@@ -16,6 +17,7 @@ void MasterRenderer::Render(const PointLight & pointLight, const Camera & camera
   staticShader_->Use();
   staticShader_->LoadViewMatrix(camera);
   entityRenderer_->Render(entities_);
+  terrainRenderer_->Render(terrains_);
   staticShader_->Release();
   entities_.clear();
 }
@@ -23,6 +25,11 @@ void MasterRenderer::Render(const PointLight & pointLight, const Camera & camera
 void MasterRenderer::ProcessEntity(const Entity & entity)
 {
   entities_[entity.model_].push_back(&entity);
+}
+
+void MasterRenderer::ProcessTerrain(const Terrain & terrain)
+{
+  terrains_.push_back(&terrain);
 }
 
 void MasterRenderer::Prepare()

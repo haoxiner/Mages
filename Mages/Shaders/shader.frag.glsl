@@ -9,5 +9,5 @@ void main()
   float diffuse = max(0.0, dot(
     normalize(vec3(1000.0,1000.0,1000.0) - v_position),
     normalize(v_normal)));
-  fragColor = vec4(pow(diffuse * texture(u_sampler, v_texCoord).xyz, vec3(1.0/2.2)), 1.0);
+  fragColor = vec4(pow(diffuse * texture(u_sampler, v_texCoord * vec2(40.0)).xyz, vec3(1.0/2.2)), 1.0);
 }
