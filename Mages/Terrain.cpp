@@ -1,7 +1,7 @@
 #include "Terrain.h"
 
 Terrain::Terrain(const float x, const float z, const ModelTexture * texture, Loader &loader)
-  : x_(x), z_(z), texture_(texture), rawModel_(GenerateTerrain(loader))
+  : x_(x * SIZE), z_(z * SIZE), texture_(texture), rawModel_(GenerateTerrain(loader))
 {
 }
 

@@ -1,11 +1,11 @@
 #include "TerrainRenderer.h"
 #include <glm/gtc/matrix_transform.hpp>
-TerrainRenderer::TerrainRenderer(StaticShader *staticShader, const glm::mat4 &projectionMatrix)
-  :staticShader_(staticShader)
+TerrainRenderer::TerrainRenderer(TerrainShader *terrainShader, const glm::mat4 &projectionMatrix)
+  :terrainShader_(terrainShader)
 {
-  staticShader_->Use();
-  staticShader_->LoadProjectionMatrix(projectionMatrix);
-  staticShader_->Release();
+  terrainShader_->Use();
+  terrainShader_->LoadProjectionMatrix(projectionMatrix);
+  terrainShader_->Release();
 }
 
 TerrainRenderer::~TerrainRenderer()
@@ -19,7 +19,7 @@ void TerrainRenderer::Render(std::vector<const Terrain*> terrains)
     PrepareTerrain(terrain);
     glm::mat4 m;
     m = glm::translate(m, glm::vec3(terrain->x_, 0.0f, terrain->z_));
-    staticShader_->LoadModelMatrix(m);
+    terrainShader_->LoadModelMatrix(m);
     glDrawElements(GL_TRIANGLES, terrain->rawModel_->indicesCount_, GL_UNSIGNED_INT, 0);
     UnbindTexturedModel();
   }

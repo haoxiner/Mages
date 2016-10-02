@@ -5,7 +5,6 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "PointLight.h"
-#include "Terrain.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -29,10 +28,10 @@ int WINAPI wWinMain(
 
   std::vector<Entity*> cubes;
   Loader loader;
-  ModelTexture *texture = new ModelTexture(loader.LoadTexture("./Resources/grass.DDS"));
+  ModelTexture *texture = new ModelTexture(loader.LoadTexture("D:/GameDev/Resources/grass.DDS"));
 
   Assimp::Importer importer;
-  const aiScene *scene = importer.ReadFile("./Resources/teapot.obj", aiProcessPreset_TargetRealtime_Fast);
+  const aiScene *scene = importer.ReadFile("D:/GameDev/Resources/Paladin_w_Prop_J_Nordstrom.fbx", aiProcessPreset_TargetRealtime_Fast);
 
 
   for (int meshIndex = 0; meshIndex < scene->mNumMeshes; meshIndex++)
@@ -71,20 +70,21 @@ int WINAPI wWinMain(
       glm::vec3(0.0f, 0.0f, 0.0f), 1.0f));
   }
   
-	StaticShader staticShader;
-  MasterRenderer renderer(&staticShader);
+
+
+  MasterRenderer renderer;
   //std::default_random_engine randomEngine;
   //std::uniform_real_distribution<float> uniformDistribution(0.0f, 1.0f);
   
 
   Camera camera;
-  camera.position_ = glm::vec3(0.0f, 1.0f,10.0f);
+  camera.position_ = glm::vec3(6.0f, 1.0f,45.9f);
   camera.roll_ = 0.0f;camera.pitch_ = 0.0f;camera.yaw_ = 0.0f;
 
   std::vector<Terrain*> terrains;
-  ModelTexture *grass = new ModelTexture(loader.LoadTexture("./Resources/grass.DDS"));
+  ModelTexture *grass = new ModelTexture(loader.LoadTexture("D:/GameDev/Resources/grass.DDS"));
   terrains.push_back(new Terrain(0, 0, grass, loader));
-  //terrains.push_back(new Terrain(1, 0, grass, loader));
+  //terrains.push_back(new Terrain(-1, 0, grass, loader));
   
   PointLight pointLight;
 	while (display.IsRunning())

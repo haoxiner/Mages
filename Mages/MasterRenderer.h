@@ -11,7 +11,7 @@
 class MasterRenderer
 {
 public:
-  MasterRenderer(StaticShader *staticShader);
+  MasterRenderer();
   ~MasterRenderer();
   void Render(const PointLight &pointLight, const Camera &camera);
   void ProcessEntity(const Entity &entity);
@@ -19,6 +19,7 @@ public:
   void Prepare();
 private:
   StaticShader *staticShader_;
+  TerrainShader *terrainShader_;
   EntityRenderer *entityRenderer_;
   TerrainRenderer *terrainRenderer_;
   // entities to be rendered
