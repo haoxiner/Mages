@@ -151,9 +151,11 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="MasterRenderer.cpp" />
     <ClCompile Include="ModelTexture.cpp" />
+    <ClCompile Include="MoveCameraForward.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RawModel.cpp" />
     <ClCompile Include="EntityRenderer.cpp" />
@@ -167,11 +169,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="MasterRenderer.h" />
     <ClInclude Include="ModelTexture.h" />
+    <ClInclude Include="MoveCameraForward.h" />
     <ClInclude Include="OpenGLHeader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RawModel.h" />

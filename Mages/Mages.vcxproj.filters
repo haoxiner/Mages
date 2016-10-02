@@ -46,6 +46,12 @@
     <Filter Include="源文件\Camera">
       <UniqueIdentifier>{4f176ee5-4caf-4341-a35c-9520a0cda62d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\DesginPattern">
+      <UniqueIdentifier>{1075b956-8ad3-4034-b00e-ae8418044742}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Control">
+      <UniqueIdentifier>{39bc0e86-62a5-4d92-9384-99d140810960}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestGame.cpp">
@@ -96,6 +102,12 @@
     <ClCompile Include="TerrainShader.cpp">
       <Filter>源文件\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="MoveCameraForward.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -145,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="TerrainShader.h">
       <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>头文件\DesginPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCameraForward.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

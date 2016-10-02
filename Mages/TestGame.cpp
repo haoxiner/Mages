@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "PointLight.h"
+#include "InputHandler.h"
+#include "MoveCameraForward.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -19,12 +21,11 @@ int WINAPI wWinMain(
 	int nCmdShow)
 {
 	Display display;
+
 	if (!display.Initialize())
 	{
 		return -1;
 	}
-
-  
 
   std::vector<Entity*> cubes;
   Loader loader;
@@ -87,6 +88,11 @@ int WINAPI wWinMain(
   //terrains.push_back(new Terrain(-1, 0, grass, loader));
   
   PointLight pointLight;
+
+  InputHandler inputHandler;
+  inputHandler.SetKeyWPressedCommand(new MoveCameraForward(&camera));
+  display.SetInputHandler(&inputHandler);
+
 	while (display.IsRunning())
 	{
     for (auto entity : cubes)
