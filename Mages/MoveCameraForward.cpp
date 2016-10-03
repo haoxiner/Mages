@@ -11,5 +11,5 @@ MoveCameraForward::~MoveCameraForward()
 
 void MoveCameraForward::Execute()
 {
-  camera_->position_.z -= 0.1f;
+  camera_->position_.z -= 1.f;
 }

@@ -13,8 +13,11 @@ public:
   void Destroy();
   bool IsRunning() { return running_ && !glfwWindowShouldClose(window_); }
   void SetInputHandler(InputHandler *inputHandler);
+  float GetDelta() { return delta_; }
 private:
   GLFWwindow *window_;
   bool running_;
+  unsigned long lastTick_;
+  float delta_;
 };
 

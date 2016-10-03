@@ -7,6 +7,7 @@
 #include "PointLight.h"
 #include "InputHandler.h"
 #include "MoveCameraForward.h"
+#include "Player.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -34,6 +35,9 @@ int WINAPI wWinMain(
   Assimp::Importer importer;
   const aiScene *scene = importer.ReadFile("D:/GameDev/Resources/Paladin_w_Prop_J_Nordstrom.fbx", aiProcessPreset_TargetRealtime_Fast);
 
+  std::ofstream file("D:/model.log");
+  file << scene->mNumMeshes << std::endl;
+  file.close();
 
   for (int meshIndex = 0; meshIndex < scene->mNumMeshes; meshIndex++)
   {
@@ -93,8 +97,10 @@ int WINAPI wWinMain(
   inputHandler.SetKeyWPressedCommand(new MoveCameraForward(&camera));
   display.SetInputHandler(&inputHandler);
 
+
 	while (display.IsRunning())
 	{
+    float delta = display.GetDelta();
     for (auto entity : cubes)
     {
       renderer.ProcessEntity(*entity);

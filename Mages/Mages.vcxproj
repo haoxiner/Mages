@@ -156,6 +156,7 @@
     <ClCompile Include="MasterRenderer.cpp" />
     <ClCompile Include="ModelTexture.cpp" />
     <ClCompile Include="MoveCameraForward.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RawModel.cpp" />
     <ClCompile Include="EntityRenderer.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="ModelTexture.h" />
     <ClInclude Include="MoveCameraForward.h" />
     <ClInclude Include="OpenGLHeader.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RawModel.h" />
     <ClInclude Include="EntityRenderer.h" />

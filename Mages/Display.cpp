@@ -4,7 +4,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 static InputHandler *inputHandler_;
 
 Display::Display()
-  :window_(nullptr), running_(false)
+  :window_(nullptr), running_(false), lastTick_(0)
 {
 }
 
@@ -42,6 +42,13 @@ bool Display::Initialize()
 
 void Display::Update()
 {
+  unsigned long tick = GetTickCount();
+  if (tick < lastTick_)
+  {
+    tick = lastTick_;
+  }
+  delta_ = static_cast<float>(tick - lastTick_);
+  lastTick_ = tick;
   glfwSwapBuffers(window_);
   glfwPollEvents();
 }

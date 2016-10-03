@@ -59,5 +59,6 @@ void EntityRenderer::PrepareInstance(const Entity & entity)
   m = glm::translate(m, entity.position_);
   m = glm::rotate(m, entity.rotation_.y, glm::vec3(0.0f, 1.0f, 0.0f));
   m = glm::rotate(m, entity.rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::scale(m, glm::vec3(entity.scale_));
   staticShader_->LoadModelMatrix(m);
 }
