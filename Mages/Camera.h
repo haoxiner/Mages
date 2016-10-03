@@ -6,6 +6,6 @@ public:
 	Camera();
 	~Camera();
 	glm::vec3 position_;
-	float yaw_, pitch_, roll_;
+	float roll_, pitch_, yaw_;
 };
 

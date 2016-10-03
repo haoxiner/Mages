@@ -36,12 +36,12 @@ void TerrainShader::LoadViewMatrix(const Camera & camera)
   /*
   * To make a matrix used to transform vector from world space to camera space
   * 1. makes the camera's position a new origin by minus camera.position
-  * 2. performs an inverse rotation by Rotate(-roll, -pitch, -yaw)
+  * 2. performs an inverse rotation by Rotate(-pitch, -yaw, -roll)
   */
   glm::mat4 view;
-  view = glm::rotate(view, -camera.roll_, glm::vec3(1.0f, 0.0f, 0.0f));
-  view = glm::rotate(view, -camera.pitch_, glm::vec3(0.0f, 1.0f, 0.0f));
-  view = glm::rotate(view, -camera.yaw_, glm::vec3(0.0f, 0.0f, 1.0f));
+  view = glm::rotate(view, glm::radians(-camera.roll_), glm::vec3(0.0f, 0.0f, 1.0f));
+  view = glm::rotate(view, glm::radians( -camera.pitch_), glm::vec3(1.0f, 0.0f, 0.0f));
+  view = glm::rotate(view, glm::radians(-camera.yaw_), glm::vec3(0.0f, 1.0f, 0.0f));
   view = glm::translate(view, -camera.position_);
   LoadMatrix4f(viewLocation_, view);
 }
