@@ -24,12 +24,12 @@ StaticShader::~StaticShader()
 {
 }
 
-void StaticShader::LoadModelMatrix(const glm::mat4 & matrix4f)
+void StaticShader::LoadModelMatrix(const glm::mat4 &matrix4f)
 {
   LoadMatrix4f(modelLocation_, matrix4f);
 }
 
-void StaticShader::LoadViewMatrix(const Camera & camera)
+void StaticShader::LoadViewMatrix(const Camera &camera)
 {
   //glm::mat4 view = glm::lookAt(camera.position_, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -46,7 +46,7 @@ void StaticShader::LoadViewMatrix(const Camera & camera)
   LoadMatrix4f(viewLocation_, view);
 }
 
-void StaticShader::LoadProjectionMatrix(const glm::mat4 & projectionMatrix)
+void StaticShader::LoadProjectionMatrix(const glm::mat4 &projectionMatrix)
 {
   LoadMatrix4f(projectionLocation_, projectionMatrix);
 }

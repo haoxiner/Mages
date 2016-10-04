@@ -14,7 +14,10 @@
 #include <assimp/postprocess.h>
 
 #include <fstream>
+#include <sstream>
 #include <random>
+#include <queue>
+
 int WINAPI wWinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -37,8 +40,33 @@ int WINAPI wWinMain(
 
   std::ofstream file("D:/model.log");
   file << scene->mNumMeshes << std::endl;
-  file.close();
+  file << scene->mNumTextures << std::endl;
+  
 
+  //for (int i = 0; i < scene->mNumTextures; i++)
+  //{
+  //  std::ostringstream ss;
+  //  ss << i;
+  //  std::string name("D:/textures/");
+  //  name += ss.str();
+  //  const char *bytes = reinterpret_cast<const char*>(scene->mTextures[i]->pcData);
+  //  if (scene->mTextures[i]->CheckFormat("jpg"))
+  //  {
+  //    name += ".jpg";
+  //  }
+
+  //  if (scene->mTextures[i]->CheckFormat("png"))
+  //  {
+  //    name += ".png";
+  //  }
+  //  std::ofstream tf(name, std::ios::binary);
+  //  if (scene->mTextures[i]->mHeight == 0)
+  //  {
+  //    tf.write(bytes, scene->mTextures[i]->mWidth);
+  //  }
+  //  tf.close();
+  //}
+  
   for (int meshIndex = 0; meshIndex < scene->mNumMeshes; meshIndex++)
   {
     aiMesh *mesh = scene->mMeshes[meshIndex];
@@ -46,6 +74,7 @@ int WINAPI wWinMain(
     std::vector<int> indices;
     std::vector<float> normals;
     std::vector<float> texCoords;
+    std::vector<int> boneIDs;
 
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -72,10 +101,70 @@ int WINAPI wWinMain(
     cubes.push_back(new Entity(
       model,
       glm::vec3(0.0f, 0.0f, 0.0f),
-      glm::vec3(0.0f, 0.0f, 0.0f), 1.0f));
+      glm::vec3(0.0f, 0.0f, 0.0f), 0.01f));
+
+    file << meshIndex << ":" << std::endl;
+    //mesh->mBones[0]->mWeights[0].mVertexId;
+    
+    // calculate max related bones per vertex
+    /*std::map<int, int> countStatistic;
+    for (int i = 0; i < mesh->mNumBones; i++)
+    {
+      for (int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+      {
+        if (countStatistic.find(mesh->mBones[i]->mWeights[j].mVertexId) != countStatistic.end())
+        {
+          countStatistic[mesh->mBones[i]->mWeights[j].mVertexId]++;
+        }
+        else
+        {
+          countStatistic[mesh->mBones[i]->mWeights[j].mVertexId] = 1;
+        }
+      }
+    }
+    int maxval = -1;
+    for (auto p : countStatistic)
+    {
+      maxval = std::max(maxval, p.second);
+    }
+    file << maxval << std::endl;*/
+
+    file << "BONE" << std::endl;
+    for (int i = 0; i < mesh->mNumBones; i++)
+    {
+      file << mesh->mBones[i]->mName.C_Str() << ",";
+    }
+
+  }
+
+  file << "flag: ";
+  file << scene->mAnimations[0]->mTicksPerSecond << std::endl;
+
+  file << "ANIMATIONS" << std::endl;
+  for (int i = 0; i < scene->mNumAnimations; i++)
+  {
+    for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++)
+    {
+      file << scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str() << std::endl;
+    }
   }
   
 
+  file << std::endl << "TREE" << std::endl;
+  std::queue<aiNode*> q;
+  q.push(scene->mRootNode);
+  file << scene->mRootNode->mName.C_Str() << std::endl;
+  while (!q.empty())
+  {
+    aiNode *p = q.front();
+    q.pop();
+    for (int i = 0; i < p->mNumChildren; i++)
+    {
+      file << p->mChildren[i]->mName.C_Str() << std::endl;
+      q.push(p->mChildren[i]);
+    }
+  }
+  file.close();
 
   MasterRenderer renderer;
   //std::default_random_engine randomEngine;
@@ -83,7 +172,7 @@ int WINAPI wWinMain(
   
 
   Camera camera;
-  camera.position_ = glm::vec3(6.0f, 1.0f,45.9f);
+  camera.position_ = glm::vec3(0.0f, 1.0f,1.9f);
   camera.roll_ = 0.0f;camera.pitch_ = 0.0f;camera.yaw_ = 0.0f;
 
   std::vector<Terrain*> terrains;
