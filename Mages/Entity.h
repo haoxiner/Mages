@@ -1,6 +1,7 @@
 #pragma once
 #include "TexturedModel.h"
 #include <glm/glm.hpp>
+#include <vector>
 class Entity
 {
 public:
@@ -11,5 +12,6 @@ public:
   glm::vec3 position_;
   glm::vec3 rotation_;
   float scale_;
+  std::vector<glm::mat4> *bones_;
 };
 

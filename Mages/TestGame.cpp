@@ -1,3 +1,4 @@
+#ifdef TESTGAME
 #include "Display.h"
 #include "Loader.h"
 #include "MasterRenderer.h"
@@ -36,12 +37,17 @@ int WINAPI wWinMain(
   ModelTexture *texture = new ModelTexture(loader.LoadTexture("D:/GameDev/Resources/grass.DDS"));
 
   Assimp::Importer importer;
-  const aiScene *scene = importer.ReadFile("D:/GameDev/Resources/Paladin_w_Prop_J_Nordstrom.fbx", aiProcessPreset_TargetRealtime_Fast);
+  const aiScene *scene = importer.ReadFile("D:/GameDev/Resources/Akai_E_Espiritu.fbx", aiProcessPreset_TargetRealtime_Fast);
+
+  Assimp::Importer animImporter;
+  const aiScene *animScene = animImporter.ReadFile("D:/GameDev/Resources/standing_run_forward.fbx", aiProcessPreset_TargetRealtime_Fast);
 
   std::ofstream file("D:/model.log");
-  file << scene->mNumMeshes << std::endl;
-  file << scene->mNumTextures << std::endl;
   
+  
+  file << "anim scene" << std::endl;
+  file << animScene->mNumTextures << std::endl;
+  file << animScene->mNumAnimations << std::endl;
 
   //for (int i = 0; i < scene->mNumTextures; i++)
   //{
@@ -74,7 +80,6 @@ int WINAPI wWinMain(
     std::vector<int> indices;
     std::vector<float> normals;
     std::vector<float> texCoords;
-    std::vector<int> boneIDs;
 
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -95,19 +100,58 @@ int WINAPI wWinMain(
       indices.push_back(mesh->mFaces[i].mIndices[1]);
       indices.push_back(mesh->mFaces[i].mIndices[2]);
     }
+    std::vector<int> boneIDs;
+    std::vector<float> boneWeights;
     
+    boneIDs.resize(4 * (vertices.size() / 3));
+    boneWeights.resize(4 * (vertices.size() / 3));
+
+    auto *boneMatrix = new std::vector<glm::mat4>;
+    auto boneTransform = new std::vector<glm::mat4>;
+    std::map<std::string, int> boneMap;
+    for (int i = 0; i < mesh->mNumBones; i++)
+    {
+      boneMatrix->push_back(glm::mat4(mesh->mBones[i]->mOffsetMatrix[0][0]));
+      boneTransform->push_back(glm::mat4());
+      boneMap[std::string(mesh->mBones[i]->mName.C_Str())] = i;
+      for (int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+      {
+        int vertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+        float weight = mesh->mBones[i]->mWeights[j].mWeight;
+        for (int k = 0; k < 4; k++)
+        {
+          if (boneWeights[4 * vertexID + k] == 0.0f)
+          {
+            boneIDs[4 * vertexID + k] = i;
+            boneWeights[4 * vertexID + k] = weight;
+            break;
+          }
+        }
+      }
+    }
+    file << std::endl << "NEWLINE" << std::endl;
+    for (int i = 0; i < 16; i++)
+    {
+      file << sizeof(glm::mat4) / sizeof(float) << ",";
+    }
+
     
-    TexturedModel *model = new TexturedModel(loader.LoadToVAO(vertices, normals, texCoords, indices), texture);
-    cubes.push_back(new Entity(
+    TexturedModel *model = new TexturedModel(loader.LoadToVAO(vertices, normals, texCoords, indices, boneIDs, boneWeights), texture);
+    Entity *entity = new Entity(
       model,
       glm::vec3(0.0f, 0.0f, 0.0f),
-      glm::vec3(0.0f, 0.0f, 0.0f), 0.01f));
+      glm::vec3(0.0f, 0.0f, 0.0f), 0.01f);
+    entity->bones_ = boneTransform;
+    file << std::endl << entity->bones_->size();
+    file.close();
+    cubes.push_back(entity);
 
+    /*
     file << meshIndex << ":" << std::endl;
     //mesh->mBones[0]->mWeights[0].mVertexId;
     
     // calculate max related bones per vertex
-    /*std::map<int, int> countStatistic;
+    std::map<int, int> countStatistic;
     for (int i = 0; i < mesh->mNumBones; i++)
     {
       for (int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
@@ -127,16 +171,16 @@ int WINAPI wWinMain(
     {
       maxval = std::max(maxval, p.second);
     }
-    file << maxval << std::endl;*/
+    file << "MAX BONES" << maxval << std::endl;
 
-    file << "BONE" << std::endl;
+    file << "BONE total: " << mesh->mNumBones  << std::endl;
     for (int i = 0; i < mesh->mNumBones; i++)
     {
       file << mesh->mBones[i]->mName.C_Str() << ",";
     }
-
+    */
   }
-
+  /*
   file << "flag: ";
   file << scene->mAnimations[0]->mTicksPerSecond << std::endl;
 
@@ -164,7 +208,42 @@ int WINAPI wWinMain(
       q.push(p->mChildren[i]);
     }
   }
-  file.close();
+ */
+
+
+  std::map<std::string, aiNodeAnim*> keyFrameMap;
+  
+  for (int i = 0; i < animScene->mAnimations[0]->mNumChannels; i++)
+  {
+    keyFrameMap[std::string(animScene->mAnimations[0]->mChannels[i]->mNodeName.C_Str())] =
+      animScene->mAnimations[0]->mChannels[i];
+  }
+  
+  glm::mat4 world2RootBone(animScene->mRootNode->mTransformation[0][0]);
+  glm::mat4 rootBone2World(glm::inverse(world2RootBone));
+  auto q1 = new std::queue<aiNode*>;
+  auto q2 = new std::queue<aiNode*>;
+  auto q3 = q1;
+  q1->push(animScene->mRootNode);
+  glm::mat4 parentTransformation;
+  while (!q1->empty())
+  {
+    auto node = q1->front();
+    q1->pop();
+    parentTransformation = node->mTransformation[0][0];
+
+
+    for (int i = 0; i < node->mNumChildren; i++)
+    {
+      q2->push(node->mChildren[i]);
+    }
+    if (q1->empty())
+    {
+      q3 = q1;
+      q1 = q2;
+      q2 = q3;
+    }
+  }
 
   MasterRenderer renderer;
   //std::default_random_engine randomEngine;
@@ -186,7 +265,7 @@ int WINAPI wWinMain(
   inputHandler.SetKeyWPressedCommand(new MoveCameraForward(&camera));
   display.SetInputHandler(&inputHandler);
 
-
+  /*return 0;*/
 	while (display.IsRunning())
 	{
     float delta = display.GetDelta();
@@ -205,3 +284,4 @@ int WINAPI wWinMain(
 	display.Destroy();
 	return 0;
 }
+#endif

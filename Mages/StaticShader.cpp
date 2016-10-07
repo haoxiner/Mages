@@ -51,11 +51,18 @@ void StaticShader::LoadProjectionMatrix(const glm::mat4 &projectionMatrix)
   LoadMatrix4f(projectionLocation_, projectionMatrix);
 }
 
+void StaticShader::LoadBones(const std::vector<glm::mat4> &bones)
+{
+  glUniformMatrix4fv(bonesLocation_, bones.size(), GL_FALSE, &bones[0][0][0]);
+}
+
 void StaticShader::BindAttributes()
 {
   BindAttribute(0, "position");
   BindAttribute(1, "normal");
   BindAttribute(2, "texCoord");
+  BindAttribute(3, "boneIDs");
+  BindAttribute(4, "boneWeights");
 }
 
 void StaticShader::GetAllUniformLocations()
@@ -63,4 +70,5 @@ void StaticShader::GetAllUniformLocations()
   modelLocation_ = GetUniformLocation("model");
   viewLocation_ = GetUniformLocation("view");
   projectionLocation_ = GetUniformLocation("projection");
+  bonesLocation_ = GetUniformLocation("bones");
 }

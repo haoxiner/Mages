@@ -52,6 +52,9 @@
     <Filter Include="头文件\Control">
       <UniqueIdentifier>{39bc0e86-62a5-4d92-9384-99d140810960}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\TestCase">
+      <UniqueIdentifier>{66929187-bba6-49bc-bcee-ae1154cb1164}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestGame.cpp">
@@ -110,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="TestAnim.cpp">
+      <Filter>源文件\TestCase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

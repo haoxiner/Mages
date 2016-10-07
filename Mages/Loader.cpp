@@ -19,9 +19,22 @@ RawModel *Loader::LoadToVAO(
   const std::vector<int> &indices)
 {
   GLuint vaoID = CreateVAO();
-  StoreDataInAttributeList(0, 3, vertices);
-  StoreDataInAttributeList(1, 3, normals);
-  StoreDataInAttributeList(2, 2, texCoords);
+  StoreFloatDataInAttributeList(0, 3, vertices);
+  StoreFloatDataInAttributeList(1, 3, normals);
+  StoreFloatDataInAttributeList(2, 2, texCoords);
+  BindIndicesBuffer(indices);
+  UnbindVAO();
+  return new RawModel(vaoID, indices.size());
+}
+
+RawModel * Loader::LoadToVAO(const std::vector<float>& vertices, const std::vector<float>& normals, const std::vector<float>& texCoords, const std::vector<int>& indices, const std::vector<int>& boneIDs, const std::vector<float>& boneWeights)
+{
+  GLuint vaoID = CreateVAO();
+  StoreFloatDataInAttributeList(0, 3, vertices);
+  StoreFloatDataInAttributeList(1, 3, normals);
+  StoreFloatDataInAttributeList(2, 2, texCoords);
+  StoreIntDataInAttributeList(3, 4, boneIDs);
+  StoreFloatDataInAttributeList(4, 4, boneWeights);
   BindIndicesBuffer(indices);
   UnbindVAO();
   return new RawModel(vaoID, indices.size());
@@ -114,14 +127,25 @@ void Loader::UnbindVAO()
   glBindVertexArray(0);
 }
 
-void Loader::StoreDataInAttributeList(int attributeLocation, int numOfComponentsPerVertex, const std::vector<float> &data)
+void Loader::StoreFloatDataInAttributeList(int attributeLocation, int numOfComponentsPerVertex, const std::vector<float> &data)
 {
   GLuint vboID;
   glGenBuffers(1, &vboID);
   vbos_.push_back(vboID);
   glBindBuffer(GL_ARRAY_BUFFER, vboID);
   glBufferData(GL_ARRAY_BUFFER, sizeof(data[0]) * data.size(), &data[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(attributeLocation, numOfComponentsPerVertex, GL_FLOAT, GL_FALSE, 0, (void*)0);
+  glVertexAttribPointer(attributeLocation, numOfComponentsPerVertex, GL_FLOAT, GL_FALSE, 0, (const void*)0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Loader::StoreIntDataInAttributeList(int attributeLocation, int numOfComponentsPerVertex, const std::vector<int>& data)
+{
+  GLuint vboID;
+  glGenBuffers(1, &vboID);
+  vbos_.push_back(vboID);
+  glBindBuffer(GL_ARRAY_BUFFER, vboID);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(data[0]) * data.size(), &data[0], GL_STATIC_DRAW);
+  glVertexAttribIPointer(attributeLocation, numOfComponentsPerVertex, GL_INT, 0, (const void*)0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 

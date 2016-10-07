@@ -40,6 +40,8 @@ void EntityRenderer::PrepareTexturedModel(const TexturedModel * model)
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
   glEnableVertexAttribArray(2);
+  glEnableVertexAttribArray(3);
+  glEnableVertexAttribArray(4);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture->textureID_);
 }
@@ -50,10 +52,12 @@ void EntityRenderer::UnbindTexturedModel()
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(2);
+  glDisableVertexAttribArray(3);
+  glDisableVertexAttribArray(4);
   glBindVertexArray(0);
 }
 
-void EntityRenderer::PrepareInstance(const Entity & entity)
+void EntityRenderer::PrepareInstance(const Entity &entity)
 { 
   glm::mat4 m;
   m = glm::translate(m, entity.position_);
@@ -61,4 +65,5 @@ void EntityRenderer::PrepareInstance(const Entity & entity)
   m = glm::rotate(m, entity.rotation_.x, glm::vec3(1.0f, 0.0f, 0.0f));
   m = glm::scale(m, glm::vec3(entity.scale_));
   staticShader_->LoadModelMatrix(m);
+  staticShader_->LoadBones(*entity.bones_);
 }

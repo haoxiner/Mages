@@ -160,6 +160,7 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RawModel.cpp" />
     <ClCompile Include="EntityRenderer.cpp" />
+    <ClCompile Include="TestAnim.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="Terrain.cpp" />
