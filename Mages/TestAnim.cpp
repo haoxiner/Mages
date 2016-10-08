@@ -26,6 +26,7 @@ std::vector<glm::mat4> *boneTransform;
 std::map<std::string, int> boneMap;
 std::vector<glm::mat4> *boneMatrix;
 std::map<std::string, aiNodeAnim*> keyFrameMap;
+
 void TraverseBoneTree(aiNode *node, glm::mat4 parentTransformation)
 {
   aiNodeAnim *animNode = keyFrameMap[std::string(node->mName.C_Str())];
@@ -43,10 +44,10 @@ void TraverseBoneTree(aiNode *node, glm::mat4 parentTransformation)
     aiQuaternion rotation = animNode->mRotationKeys[0].mValue;
     aiMatrix3x3 rotationMatrix(rotation.GetMatrix());
     glm::mat4 rotationTransformation(
-      rotationMatrix[0][0], rotationMatrix[1][0], rotationMatrix[2][0], rotationMatrix[3][0],
-      rotationMatrix[0][1], rotationMatrix[1][1], rotationMatrix[2][1], rotationMatrix[3][1],
-      rotationMatrix[0][2], rotationMatrix[1][2], rotationMatrix[2][2], rotationMatrix[3][2],
-      rotationMatrix[0][3], rotationMatrix[1][3], rotationMatrix[2][3], rotationMatrix[3][3]);
+      rotationMatrix[0][0], rotationMatrix[1][0], rotationMatrix[2][0], 0.0f,
+      rotationMatrix[0][1], rotationMatrix[1][1], rotationMatrix[2][1], 0.0f,
+      rotationMatrix[0][2], rotationMatrix[1][2], rotationMatrix[2][2], 0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f);
 
     aiVector3D translate = animNode->mPositionKeys[0].mValue;
     glm::mat4 translateTransformation(
@@ -54,9 +55,20 @@ void TraverseBoneTree(aiNode *node, glm::mat4 parentTransformation)
       0.0f, 1.0f, 0.0f, translate.y,
       0.0f, 0.0f, 1.0f, translate.z,
       0.0f, 0.0f, 0.0f, 1.0f);
-    nodeTransformation = translateTransformation * rotationTransformation * scaleTransformation;
+    nodeTransformation = parentTransformation * translateTransformation * rotationTransformation * scaleTransformation;
+
+    auto boneIDIter = boneMap.find(std::string(animNode->mNodeName.C_Str()));
+    if (boneIDIter != boneMap.end())
+    {
+      (*boneTransform)[boneIDIter->second] = rootBone2World * nodeTransformation * (*boneMatrix)[boneIDIter->second];
+    }
   }
-  nodeTransformation = world2RootBone;
+  else
+  {
+    nodeTransformation = parentTransformation;
+  }
+  
+  
   for (int i = 0; i < node->mNumChildren; i++)
   {
     TraverseBoneTree(node->mChildren[i], nodeTransformation);
@@ -118,6 +130,7 @@ int WINAPI wWinMain(
   boneWeights.resize(4 * (vertices.size() / 3));
   boneMatrix = new std::vector<glm::mat4>;
   boneTransform = new std::vector<glm::mat4>;
+  boneTransform->resize(mesh->mNumBones);
   for (int i = 0; i < mesh->mNumBones; i++)
   {
     aiMatrix4x4 offset = mesh->mBones[i]->mOffsetMatrix;
@@ -127,9 +140,6 @@ int WINAPI wWinMain(
       offset[0][2], offset[1][2], offset[2][2], offset[3][2],
       offset[0][3], offset[1][3], offset[2][3], offset[3][3]);
     boneMatrix->push_back(offsetMatrix);
-
-
-    boneTransform->push_back(glm::mat4());
     boneMap[std::string(mesh->mBones[i]->mName.C_Str())] = i;
     for (int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
     {
@@ -164,19 +174,23 @@ int WINAPI wWinMain(
       animScene->mAnimations[0]->mChannels[i];
   }
 
-  world2RootBone = glm::mat4(animScene->mRootNode->mTransformation[0][0]);
-  rootBone2World = glm::mat4(glm::inverse(world2RootBone));
-  auto q1 = new std::queue<aiNode*>;
-  auto q2 = new std::queue<aiNode*>;
-  auto q3 = q1;
-  q1->push(animScene->mRootNode);
-  glm::mat4 parentTransformation;
+  auto rootTransformation = scene->mRootNode->mTransformation;
+  world2RootBone = glm::mat4(
+    rootTransformation[0][0], rootTransformation[1][0], rootTransformation[2][0], rootTransformation[3][0],
+    rootTransformation[0][1], rootTransformation[1][1], rootTransformation[2][1], rootTransformation[3][1],
+    rootTransformation[0][2], rootTransformation[1][2], rootTransformation[2][2], rootTransformation[3][2],
+    rootTransformation[0][3], rootTransformation[1][3], rootTransformation[2][3], rootTransformation[3][3]
+  );
 
+  rootBone2World = glm::mat4(glm::inverse(world2RootBone));
+  
+  TraverseBoneTree(scene->mRootNode, glm::mat4(1.0f));
+  //return 0;
 
   MasterRenderer renderer;
 
   Camera camera;
-  camera.position_ = glm::vec3(0.0f, 1.0f, 1.9f);
+  camera.position_ = glm::vec3(0.0f, 1.0f, 2.9f);
   camera.roll_ = 0.0f;camera.pitch_ = 0.0f;camera.yaw_ = 0.0f;
 
   std::vector<Terrain*> terrains;
@@ -189,14 +203,14 @@ int WINAPI wWinMain(
   inputHandler.SetKeyWPressedCommand(new MoveCameraForward(&camera));
   display.SetInputHandler(&inputHandler);
 
-  /*return 0;*/
+  
   while (display.IsRunning())
   {
     float delta = display.GetDelta();
     renderer.ProcessEntity(*entity);
     for (auto terrain : terrains)
     {
-      renderer.ProcessTerrain(*terrain);
+      //renderer.ProcessTerrain(*terrain);
     }
     renderer.Prepare();
     renderer.Render(pointLight, camera);
