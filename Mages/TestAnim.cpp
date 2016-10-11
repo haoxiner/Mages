@@ -93,13 +93,14 @@ void TraverseBoneTree(aiNode *node, const glm::mat4 &parentTransformation)
     glm::mat4 rotationTransformation(makeMat4FromMat3(rotationMatrix));
 
     aiVector3D translate = animNode->mPositionKeys[0].mValue;
+
+    // Column-major
     glm::mat4 translateTransformation(
-      1.0f, 0.0f, 0.0f, translate.x,
-      0.0f, 1.0f, 0.0f, translate.y,
-      0.0f, 0.0f, 1.0f, translate.z,
-      0.0f, 0.0f, 0.0f, 1.0f);
-    //nodeTransformation = translateTransformation * rotationTransformation * scaleTransformation;
-    nodeTransformation = scaleTransformation * rotationTransformation;
+      1.0f, 0.0f, 0.0f, 0.0f,
+      0.0f, 1.0f, 0.0f, 0.0f,
+      0.0f, 0.0f, 1.0f, 0.0f,
+      translate.x, translate.y, translate.z, 1.0f);
+    nodeTransformation = scaleTransformation * rotationTransformation * translateTransformation;
   }
   nodeTransformation = parentTransformation * nodeTransformation;
   auto boneIDIter = boneMap.find(nodeName);
