@@ -27,13 +27,60 @@ std::map<std::string, int> boneMap;
 std::vector<glm::mat4> *boneMatrix;
 std::map<std::string, aiNodeAnim*> keyFrameMap;
 
-void TraverseBoneTree(aiNode *node, glm::mat4 parentTransformation)
+
+glm::mat4 makeMat4FromMat4(aiMatrix4x4 m)
 {
-  aiNodeAnim *animNode = keyFrameMap[std::string(node->mName.C_Str())];
-  glm::mat4 nodeTransformation;
+#ifdef ROW_MAJOR
+  return glm::mat4(
+    m[0][0], m[0][1], m[0][2], m[0][3],
+    m[1][0], m[1][1], m[1][2], m[1][3],
+    m[2][0], m[2][1], m[2][2], m[2][3],
+    m[3][0], m[3][1], m[3][2], m[3][3]);
+#else
+  /*return glm::mat4(
+    m[0][0], m[1][0], m[2][0], m[3][0],
+    m[0][1], m[1][1], m[2][1], m[3][1],
+    m[0][2], m[1][2], m[2][2], m[3][2],
+    m[0][3], m[1][3], m[2][3], m[3][3]);*/
+  return glm::mat4(
+    m.a1, m.b1, m.c1, m.d1,
+    m.a2, m.b2, m.c2, m.d2,
+    m.a3, m.b3, m.c3, m.d3,
+    m.a4, m.b4, m.c4, m.d4);
+#endif
+}
+glm::mat4 makeMat4FromMat3(aiMatrix3x3 m)
+{
+#ifdef ROW_MAJOR
+  return glm::mat4(
+    m[0][0], m[0][1], m[0][2], 0.0f,
+    m[1][0], m[1][1], m[1][2], 0.0f,
+    m[2][0], m[2][1], m[2][2], 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);
+#else
+  /*return glm::mat4(
+    m[0][0], m[1][0], m[2][0], 0.0f,
+    m[0][1], m[1][1], m[2][1], 0.0f,
+    m[0][2], m[1][2], m[2][2], 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);*/
+  return glm::mat4(
+    m.a1, m.b1, m.c1, 0.0f,
+    m.a2, m.b2, m.c2, 0.0f,
+    m.a3, m.b3, m.c3, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);
+#endif
+}
+
+void TraverseBoneTree(aiNode *node, const glm::mat4 &parentTransformation)
+{
   
-  if (animNode)
+  std::string nodeName(node->mName.C_Str());
+  auto animNodeIter = keyFrameMap.find(nodeName);
+  glm::mat4 nodeTransformation(makeMat4FromMat4(node->mTransformation));
+  
+  if (animNodeIter != keyFrameMap.end())
   {
+    auto *animNode = animNodeIter->second;
     aiVector3D scaling = animNode->mScalingKeys[0].mValue;
     glm::mat4 scaleTransformation(
       scaling.x, 0.0f, 0.0f, 0.0f,
@@ -42,12 +89,8 @@ void TraverseBoneTree(aiNode *node, glm::mat4 parentTransformation)
       0.0f, 0.0f, 0.0f, 1.0f);
 
     aiQuaternion rotation = animNode->mRotationKeys[0].mValue;
-    aiMatrix3x3 rotationMatrix(rotation.GetMatrix());
-    glm::mat4 rotationTransformation(
-      rotationMatrix[0][0], rotationMatrix[1][0], rotationMatrix[2][0], 0.0f,
-      rotationMatrix[0][1], rotationMatrix[1][1], rotationMatrix[2][1], 0.0f,
-      rotationMatrix[0][2], rotationMatrix[1][2], rotationMatrix[2][2], 0.0f,
-      0.0f, 0.0f, 0.0f, 1.0f);
+    aiMatrix3x3 rotationMatrix(rotation.Normalize().GetMatrix());
+    glm::mat4 rotationTransformation(makeMat4FromMat3(rotationMatrix));
 
     aiVector3D translate = animNode->mPositionKeys[0].mValue;
     glm::mat4 translateTransformation(
@@ -55,19 +98,15 @@ void TraverseBoneTree(aiNode *node, glm::mat4 parentTransformation)
       0.0f, 1.0f, 0.0f, translate.y,
       0.0f, 0.0f, 1.0f, translate.z,
       0.0f, 0.0f, 0.0f, 1.0f);
-    nodeTransformation = parentTransformation * translateTransformation * rotationTransformation * scaleTransformation;
-
-    auto boneIDIter = boneMap.find(std::string(animNode->mNodeName.C_Str()));
-    if (boneIDIter != boneMap.end())
-    {
-      (*boneTransform)[boneIDIter->second] = rootBone2World * nodeTransformation * (*boneMatrix)[boneIDIter->second];
-    }
+    //nodeTransformation = translateTransformation * rotationTransformation * scaleTransformation;
+    nodeTransformation = scaleTransformation * rotationTransformation;
   }
-  else
+  nodeTransformation = parentTransformation * nodeTransformation;
+  auto boneIDIter = boneMap.find(nodeName);
+  if (boneIDIter != boneMap.end())
   {
-    nodeTransformation = parentTransformation;
+    (*boneTransform)[boneIDIter->second] = rootBone2World * nodeTransformation * (*boneMatrix)[boneIDIter->second];
   }
-  
   
   for (int i = 0; i < node->mNumChildren; i++)
   {
@@ -126,19 +165,15 @@ int WINAPI wWinMain(
   }
   std::vector<int> boneIDs;
   std::vector<float> boneWeights;
-  boneIDs.resize(4 * (vertices.size() / 3));
-  boneWeights.resize(4 * (vertices.size() / 3));
+  boneIDs.resize(4 * (vertices.size() / 3), 0);
+  boneWeights.resize(4 * (vertices.size() / 3), 0.0f);
   boneMatrix = new std::vector<glm::mat4>;
   boneTransform = new std::vector<glm::mat4>;
   boneTransform->resize(mesh->mNumBones);
   for (int i = 0; i < mesh->mNumBones; i++)
   {
     aiMatrix4x4 offset = mesh->mBones[i]->mOffsetMatrix;
-    glm::mat4 offsetMatrix(
-      offset[0][0], offset[1][0], offset[2][0], offset[3][0],
-      offset[0][1], offset[1][1], offset[2][1], offset[3][1],
-      offset[0][2], offset[1][2], offset[2][2], offset[3][2],
-      offset[0][3], offset[1][3], offset[2][3], offset[3][3]);
+    glm::mat4 offsetMatrix(makeMat4FromMat4(offset));
     boneMatrix->push_back(offsetMatrix);
     boneMap[std::string(mesh->mBones[i]->mName.C_Str())] = i;
     for (int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
@@ -175,12 +210,7 @@ int WINAPI wWinMain(
   }
 
   auto rootTransformation = scene->mRootNode->mTransformation;
-  world2RootBone = glm::mat4(
-    rootTransformation[0][0], rootTransformation[1][0], rootTransformation[2][0], rootTransformation[3][0],
-    rootTransformation[0][1], rootTransformation[1][1], rootTransformation[2][1], rootTransformation[3][1],
-    rootTransformation[0][2], rootTransformation[1][2], rootTransformation[2][2], rootTransformation[3][2],
-    rootTransformation[0][3], rootTransformation[1][3], rootTransformation[2][3], rootTransformation[3][3]
-  );
+  world2RootBone = makeMat4FromMat4(rootTransformation);
 
   rootBone2World = glm::mat4(glm::inverse(world2RootBone));
   
@@ -190,7 +220,7 @@ int WINAPI wWinMain(
   MasterRenderer renderer;
 
   Camera camera;
-  camera.position_ = glm::vec3(0.0f, 1.0f, 2.9f);
+  camera.position_ = glm::vec3(0.0f, 1.0f, 3.9f);
   camera.roll_ = 0.0f;camera.pitch_ = 0.0f;camera.yaw_ = 0.0f;
 
   std::vector<Terrain*> terrains;

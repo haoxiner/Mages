@@ -138,7 +138,7 @@ void Loader::StoreFloatDataInAttributeList(int attributeLocation, int numOfCompo
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Loader::StoreIntDataInAttributeList(int attributeLocation, int numOfComponentsPerVertex, const std::vector<int>& data)
+void Loader::StoreIntDataInAttributeList(int attributeLocation, int numOfComponentsPerVertex, const std::vector<int> &data)
 {
   GLuint vboID;
   glGenBuffers(1, &vboID);
@@ -149,7 +149,7 @@ void Loader::StoreIntDataInAttributeList(int attributeLocation, int numOfCompone
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Loader::BindIndicesBuffer(const std::vector<int>& data)
+void Loader::BindIndicesBuffer(const std::vector<int> &data)
 {
   GLuint vboID;
   glGenBuffers(1, &vboID);
